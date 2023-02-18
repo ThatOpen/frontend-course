@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { getAuth, signOut } from "firebase/auth";
+import Button from "@mui/material/Button";
 
 export const LogOutButton: FC = () => {
   const auth = getAuth();
@@ -7,5 +8,11 @@ export const LogOutButton: FC = () => {
     signOut(auth);
   };
 
-  return <button onClick={onLogoutClick}>Logout</button>;
+  return (
+    <>
+      <Button onClick={onLogoutClick} variant="contained">
+        Log out
+      </Button>
+    </>
+  );
 };

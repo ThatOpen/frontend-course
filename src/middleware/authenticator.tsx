@@ -20,7 +20,7 @@ export const Authenticator: FC = () => {
       listenToAuthChanges();
       authInitialized = true;
     }
-  }, []);
+  });
 
   return <></>;
 };
