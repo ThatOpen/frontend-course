@@ -1,6 +1,12 @@
 import { FC } from "react";
-import { getApp } from "firebase/app";
+import { useAppContext } from "../middleware/context-provider";
 
 export const LoginForm: FC = () => {
-  return <p>{JSON.stringify(getApp())}</p>;
+  const dispatch = useAppContext()[1];
+
+  const onClick = () => {
+    dispatch({ action: "LOGIN" });
+  };
+
+  return <button onClick={onClick}>Login</button>;
 };
