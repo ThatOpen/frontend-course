@@ -1,5 +1,6 @@
 import { FC } from "react";
+import { getApp } from "firebase/app";
 
 export const LoginForm: FC = () => {
-  return <h1>Hello login!</h1>;
+  return <p>{JSON.stringify(getApp())}</p>;
 };
