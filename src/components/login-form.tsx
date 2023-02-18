@@ -2,11 +2,13 @@ import { FC } from "react";
 import { useAppContext } from "../middleware/context-provider";
 
 export const LoginForm: FC = () => {
-  const dispatch = useAppContext()[1];
+  const [state] = useAppContext();
 
-  const onClick = () => {
-    dispatch({ action: "LOGIN" });
-  };
+  const onClick = () => {};
 
-  return <button onClick={onClick}>Login</button>;
+  return state.user ? (
+    <> {state.user.displayName} </>
+  ) : (
+    <button onClick={onClick}>Login</button>
+  );
 };
