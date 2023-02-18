@@ -1,12 +1,11 @@
 import { FC } from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAppContext } from "../../middleware/context-provider";
 
 export const LogInButton: FC = () => {
-  const auth = getAuth();
-  const provider = new GoogleAuthProvider();
+  const dispatch = useAppContext()[1];
 
   const onLoginClick = () => {
-    signInWithPopup(auth, provider);
+    dispatch({ type: "LOGIN" });
   };
 
   return <button onClick={onLoginClick}>Log in</button>;

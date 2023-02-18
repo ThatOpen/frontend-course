@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { getAuth, signOut } from "firebase/auth";
 import Button from "@mui/material/Button";
+import { useAppContext } from "../../middleware/context-provider";
 
 export const LogOutButton: FC = () => {
-  const auth = getAuth();
+  const dispatch = useAppContext()[1];
   const onLogoutClick = () => {
-    signOut(auth);
+    dispatch({ type: "LOGOUT" });
   };
 
   return (
