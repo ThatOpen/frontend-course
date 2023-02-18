@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Dashboard } from "./components/home";
 import { BuildingViewer } from "./components/building-viewer";
-import { MapViewer } from "./components/map-viewer";
+import { MapViewer } from "./components/map/map-viewer";
 import { ContextProvider } from "./middleware/context-provider";
 
 function App() {
