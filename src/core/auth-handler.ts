@@ -5,7 +5,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-export const userAuth = {
+export const authHandler = {
   login: () => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
