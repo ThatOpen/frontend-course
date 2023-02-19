@@ -5,6 +5,10 @@
   font-family: "Roboto", Helvetica, sans-serif;
 }
 
+.hidden {
+  visibility: collapse;
+}
+
 .full-screen {
   width: 100vw;
   height: 100vh;

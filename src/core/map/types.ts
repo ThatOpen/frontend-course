@@ -8,12 +8,18 @@ export interface GisParameters {
   buildings: Building[];
 }
 
+export interface Model {
+  name: string;
+  id: string;
+}
+
 export interface Building {
   uid: string;
   userID: string;
   lat: number;
   lng: number;
   name: string;
+  models: Model[];
 }
 
 export interface LngLat {

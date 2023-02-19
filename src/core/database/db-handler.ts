@@ -36,6 +36,7 @@ export const databaseHandler = {
 
   updateBuilding: async (building: Building) => {
     const dbInstance = getFirestore(getApp());
+    console.log(building);
     await updateDoc(doc(dbInstance, "buildings", building.uid), {
       ...building,
     });
