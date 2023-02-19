@@ -6,22 +6,24 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-
-const items = ["Models", "Floorplans", "Issues", "Map", "Log out"];
+import { getSidebarTools } from "./sidebar-tools";
+import { useAppContext } from "../../../middleware/context-provider";
 
 export const BuildingSidebar: FC<{ open: boolean }> = (props) => {
   const { open } = props;
+  const [state, dispatch] = useAppContext();
 
-  // const onGoToMap = () => {
-  //   dispatch({ type: "CLOSE_BUILDING" });
-  // };
+  const tools = getSidebarTools(dispatch);
 
   return (
     <List>
-      {items.map((text, index) => (
-        <ListItem key={text} disablePadding sx={{ display: "block" }}>
+      {tools.map((tool) => (
+        <ListItem
+          onClick={tool.action}
+          key={tool.name}
+          disablePadding
+          sx={{ display: "block" }}
+        >
           <ListItemButton
             sx={{
               minHeight: 48,
@@ -36,9 +38,9 @@ export const BuildingSidebar: FC<{ open: boolean }> = (props) => {
                 justifyContent: "center",
               }}
             >
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {tool.icon}
             </ListItemIcon>
-            <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+            <ListItemText primary={tool.name} sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>
         </ListItem>
       ))}
