@@ -23,4 +23,7 @@ export const executeCore = (action: Action, events: Events) => {
   if (action.type === "DELETE_BUILDING") {
     return databaseHandler.deleteBuilding(action.payload, events);
   }
+  if (action.type === "UPDATE_BUILDING") {
+    return databaseHandler.updateBuilding(action.payload);
+  }
 };

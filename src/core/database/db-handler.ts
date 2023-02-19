@@ -5,7 +5,13 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import { deleteDoc, doc, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getFirestore,
+  updateDoc,
+} from "firebase/firestore";
 import { Events } from "../../middleware/event-handler";
 import { Building } from "../map/types";
 
@@ -26,5 +32,12 @@ export const databaseHandler = {
     const dbInstance = getFirestore(getApp());
     await deleteDoc(doc(dbInstance, "buildings", id));
     events.trigger({ type: "CLOSE_BUILDING" });
+  },
+
+  updateBuilding: async (building: Building) => {
+    const dbInstance = getFirestore(getApp());
+    await updateDoc(doc(dbInstance, "buildings", building.uid), {
+      ...building,
+    });
   },
 };

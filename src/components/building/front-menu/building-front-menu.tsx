@@ -6,16 +6,31 @@ import { BuildingInfoMenu } from "./front-menu-content/building-info-menu";
 
 export type FrontMenuMode = "BuildingInfo";
 
-export const BuildingFrontMenu: FC<{ mode: FrontMenuMode }> = ({ mode }) => {
+export const BuildingFrontMenu: FC<{
+  mode: FrontMenuMode;
+  open: boolean;
+  onToggleMenu: (active: boolean) => void;
+}> = ({ mode, open, onToggleMenu }) => {
+  if (!open) {
+    return <></>;
+  }
+
   const content = new Map<FrontMenuMode, any>();
-  content.set("BuildingInfo", <BuildingInfoMenu />);
+  const buildingInfoMenu = <BuildingInfoMenu onToggleMenu={onToggleMenu} />;
+  content.set("BuildingInfo", buildingInfoMenu);
+
+  const titles = {
+    BuildingInfo: "Building Information",
+  };
+
+  const title = titles[mode];
 
   return (
     <Card className="front-menu">
       <CardContent>
         <div className="front-menu-header">
-          <h2>Title</h2>
-          <Button>
+          <h2>{title}</h2>
+          <Button onClick={() => onToggleMenu(false)}>
             <CloseIcon />
           </Button>
         </div>

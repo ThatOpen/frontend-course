@@ -16,14 +16,15 @@ interface SideTool {
 
 export function getSidebarTools(
   state: State,
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<Action>,
+  toggleMenu: () => void
 ): SideTool[] {
   return [
     {
       name: "Info",
       icon: <ListIcon />,
       action: () => {
-        console.log("Models!");
+        toggleMenu();
       },
     },
     {

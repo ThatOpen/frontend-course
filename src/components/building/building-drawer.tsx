@@ -10,11 +10,12 @@ import { getDrawer, getDrawerHeader } from "./mui-utils";
 export const BuildingDrawer: FC<{
   open: boolean;
   width: number;
+  onToggleMenu: () => void;
   onClose: () => void;
 }> = (props) => {
   const theme = useTheme();
 
-  const { open, width: drawerWidth, onClose } = props;
+  const { open, width: drawerWidth, onClose, onToggleMenu } = props;
 
   const Drawer = getDrawer(drawerWidth);
   const DrawerHeader = getDrawerHeader();
@@ -30,7 +31,7 @@ export const BuildingDrawer: FC<{
           )}
         </IconButton>
       </DrawerHeader>
-      <BuildingSidebar open={open} />
+      <BuildingSidebar onToggleMenu={onToggleMenu} open={open} />
       <Divider />
     </Drawer>
   );
