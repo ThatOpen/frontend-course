@@ -6,6 +6,7 @@ import { BuildingDrawer } from "./building-drawer";
 import { getDrawerHeader } from "./mui-utils";
 import { useAppContext } from "../../middleware/context-provider";
 import { Navigate } from "react-router-dom";
+import { BuildingFrontMenu } from "./front-menu/building-front-menu";
 
 export const BuildingViewer: FC = () => {
   const [open, setOpen] = useState(false);
@@ -45,6 +46,7 @@ export const BuildingViewer: FC = () => {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        <BuildingFrontMenu mode="BuildingInfo" />
         <h1>Hello building viewer!</h1>
       </Box>
     </Box>

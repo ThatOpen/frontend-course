@@ -13,7 +13,7 @@ export const BuildingSidebar: FC<{ open: boolean }> = (props) => {
   const { open } = props;
   const [state, dispatch] = useAppContext();
 
-  const tools = getSidebarTools(dispatch);
+  const tools = getSidebarTools(state, dispatch);
 
   return (
     <List>

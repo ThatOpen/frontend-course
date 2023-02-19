@@ -11,6 +11,10 @@
   position: absolute;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .thumbnail {
   background: rgba(230, 230, 230, 0.7);
   padding: 10px;
