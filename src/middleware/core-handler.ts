@@ -4,7 +4,7 @@ import { Action } from "./actions";
 import { Events } from "./event-handler";
 import { buildingHandler } from "../core/building/building-handler";
 
-export const executeCore = (action: Action, events: Events) => {
+export const executeCore = async (action: Action, events: Events) => {
   if (action.type === "LOGIN") {
     return databaseHandler.login();
   }
@@ -37,7 +37,8 @@ export const executeCore = (action: Action, events: Events) => {
   }
   if (action.type === "UPLOAD_MODEL") {
     const { model, file, building } = action.payload;
-    return databaseHandler.uploadModel(model, file, building, events);
+    const zipFile = await buildingHandler.convertIfcToFragments(file);
+    return databaseHandler.uploadModel(model, zipFile, building, events);
   }
   if (action.type === "DELETE_MODEL") {
     const { model, building } = action.payload;

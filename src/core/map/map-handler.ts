@@ -14,7 +14,6 @@ export const mapHandler = {
 
   remove() {
     if (this.viewer) {
-      console.log("map disposed!");
       this.viewer.dispose();
       this.viewer = null;
     }

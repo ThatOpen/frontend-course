@@ -59,13 +59,13 @@ export const BuildingViewer: FC = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
 
+        <BuildingViewport />
+
         <BuildingFrontMenu
           onToggleMenu={toggleFrontMenu}
           open={frontOpen}
           mode={frontMenu}
         />
-
-        <BuildingViewport />
       </Box>
     </Box>
   );

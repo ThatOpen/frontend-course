@@ -11,9 +11,15 @@ export const buildingHandler = {
 
   remove() {
     if (this.viewer) {
-      console.log("building disposed!");
       this.viewer.dispose();
       this.viewer = null;
     }
+  },
+
+  async convertIfcToFragments(ifc: File) {
+    if (!this.viewer) {
+      throw new Error("Building viewer not active!");
+    }
+    return this.viewer.convertIfcToFragments(ifc);
   },
 };
