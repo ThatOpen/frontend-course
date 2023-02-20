@@ -11,7 +11,10 @@ export function getBottombarTools(): Tool[] {
       icon: <CutIcon />,
       active: false,
       action: (dispatch: any) => {
-        console.log("hei");
+        const tool = findTool("Clipping planes");
+        deactivateAllTools(dispatch, "Clipping planes");
+        tool.active = !tool.active;
+        dispatch({ type: "TOGGLE_CLIPPER", payload: tool.active });
       },
     },
     {
@@ -19,7 +22,10 @@ export function getBottombarTools(): Tool[] {
       icon: <RulerIcon />,
       active: false,
       action: (dispatch: any) => {
-        console.log("hei");
+        const tool = findTool("Dimensions");
+        deactivateAllTools(dispatch, "Dimensions");
+        tool.active = !tool.active;
+        dispatch({ type: "TOGGLE_DIMENSIONS", payload: tool.active });
       },
     },
     {
@@ -27,11 +33,10 @@ export function getBottombarTools(): Tool[] {
       icon: <ExplodeIcon />,
       active: false,
       action: (dispatch: any) => {
-        const tool = tools.find((tool) => tool.name === "Explosion");
-        if (tool) {
-          tool.active = !tool.active;
-          dispatch({ type: "EXPLODE_MODEL", payload: tool.active });
-        }
+        const tool = findTool("Explosion");
+        deactivateAllTools(dispatch, "Explosion");
+        tool.active = !tool.active;
+        dispatch({ type: "EXPLODE_MODEL", payload: tool.active });
       },
     },
     {
@@ -43,5 +48,20 @@ export function getBottombarTools(): Tool[] {
       },
     },
   ];
+
+  const findTool = (name: string) => {
+    const tool = tools.find((tool) => tool.name === name);
+    if (!tool) throw new Error("Tool not found!");
+    return tool;
+  };
+
+  const deactivateAllTools = (dispatch: any, name: string) => {
+    for (const tool of tools) {
+      if (tool.active && tool.name !== name) {
+        tool.action(dispatch);
+      }
+    }
+  };
+
   return tools;
 }

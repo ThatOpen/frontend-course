@@ -35,6 +35,12 @@ export class BuildingScene {
     this.components.raycaster = new OBC.SimpleRaycaster(this.components);
     this.components.init();
 
+    const dimensions = new OBC.SimpleDimensions(this.components);
+    this.components.tools.add(dimensions);
+
+    const clipper = new OBC.EdgesClipper(this.components, OBC.EdgesPlane);
+    this.components.tools.add(clipper);
+
     const directionalLight = new THREE.DirectionalLight();
     directionalLight.position.set(5, 10, 3);
     directionalLight.intensity = 0.5;
@@ -116,6 +122,9 @@ export class BuildingScene {
       { name: "click", action: this.select },
       { name: "mouseup", action: this.updateCulling },
       { name: "wheel", action: this.updateCulling },
+      { name: "keydown", action: this.createClippingPlane },
+      { name: "keydown", action: this.createDimension },
+      { name: "keydown", action: this.deleteClippingPlaneOrDimension },
     ];
     this.toggleEvents(true);
   }
@@ -123,12 +132,63 @@ export class BuildingScene {
   private toggleEvents(active: boolean) {
     for (const event of this.events) {
       if (active) {
-        this.container.addEventListener(event.name, event.action);
+        window.addEventListener(event.name, event.action);
       } else {
-        this.container.removeEventListener(event.name, event.action);
+        window.removeEventListener(event.name, event.action);
       }
     }
   }
+
+  toggleClippingPlanes(active: boolean) {
+    const clipper = this.getClipper();
+    if (clipper) {
+      clipper.enabled = active;
+    }
+  }
+
+  toggleDimensions(active: boolean) {
+    const dimensions = this.getDimensions();
+    if (dimensions) {
+      dimensions.enabled = active;
+    }
+  }
+
+  private createClippingPlane = (event: KeyboardEvent) => {
+    if (event.code === "KeyP") {
+      const clipper = this.getClipper();
+      if (clipper) {
+        clipper.create();
+      }
+    }
+  };
+
+  private createDimension = (event: KeyboardEvent) => {
+    if (event.code === "KeyD") {
+      const dims = this.getDimensions();
+      if (dims) {
+        dims.create();
+      }
+    }
+  };
+
+  private getClipper() {
+    return this.components.tools.get("EdgesClipper") as OBC.EdgesClipper;
+  }
+
+  private getDimensions() {
+    return this.components.tools.get(
+      "SimpleDimensions"
+    ) as OBC.SimpleDimensions;
+  }
+
+  private deleteClippingPlaneOrDimension = (event: KeyboardEvent) => {
+    if (event.code === "Delete") {
+      const dims = this.getDimensions();
+      dims.delete();
+      const clipper = this.getClipper();
+      clipper.delete();
+    }
+  };
 
   private updateCulling = () => {
     this.fragments.culler.needsUpdate = true;
