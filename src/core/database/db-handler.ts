@@ -5,14 +5,7 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getFirestore,
-  updateDoc,
-} from "firebase/firestore";
+import { deleteDoc, doc, getFirestore, updateDoc } from "firebase/firestore";
 import { Events } from "../../middleware/event-handler";
 import { Building, Model } from "../map/types";
 import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";

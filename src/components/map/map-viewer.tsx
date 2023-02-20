@@ -29,10 +29,6 @@ export const MapViewer: FC = () => {
       const thumbnail = thumbnailRef.current;
       dispatch({ type: "START_MAP", payload: { container, user, thumbnail } });
     }
-
-    return () => {
-      dispatch({ type: "REMOVE_MAP" });
-    };
   }, []);
 
   if (!user) {

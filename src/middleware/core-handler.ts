@@ -2,19 +2,22 @@ import { mapHandler } from "../core/map/map-handler";
 import { databaseHandler } from "../core/database/db-handler";
 import { Action } from "./actions";
 import { Events } from "./event-handler";
+import { buildingHandler } from "../core/building/building-handler";
 
 export const executeCore = (action: Action, events: Events) => {
   if (action.type === "LOGIN") {
     return databaseHandler.login();
   }
   if (action.type === "LOGOUT") {
+    buildingHandler.remove();
+    mapHandler.remove();
     return databaseHandler.logout();
   }
   if (action.type === "START_MAP") {
     const { container, user } = action.payload;
     return mapHandler.start(container, user, events);
   }
-  if (action.type === "REMOVE_MAP") {
+  if (action.type === "REMOVE_MAP" || action.type === "OPEN_BUILDING") {
     return mapHandler.remove();
   }
   if (action.type === "ADD_BUILDING") {
@@ -25,6 +28,12 @@ export const executeCore = (action: Action, events: Events) => {
   }
   if (action.type === "UPDATE_BUILDING") {
     return databaseHandler.updateBuilding(action.payload);
+  }
+  if (action.type === "START_BUILDING") {
+    return buildingHandler.start(action.payload);
+  }
+  if (action.type === "CLOSE_BUILDING") {
+    return buildingHandler.remove();
   }
   if (action.type === "UPLOAD_MODEL") {
     const { model, file, building } = action.payload;
