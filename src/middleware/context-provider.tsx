@@ -22,16 +22,18 @@ export const ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useReducer(reducer, initialState);
 
   const events = new Events();
-  for (const type of ActionList) {
-    events.on(type, (payload: any) => {
-      setState({ type, payload });
-    });
-  }
 
   const dispatch = (value: Action) => {
     setState(value);
     executeCore(value, events);
   };
+
+  for (const type of ActionList) {
+    events.on(type, (payload: any) => {
+      const action = { type, payload };
+      dispatch(action);
+    });
+  }
 
   return (
     <appContext.Provider value={[state, dispatch]}>

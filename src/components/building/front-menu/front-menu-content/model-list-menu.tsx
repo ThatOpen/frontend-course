@@ -22,24 +22,39 @@ export const ModelListMenu: FC = () => {
         const file = input.files[0];
         const newBuilding = { ...building };
         const id = `${file.name}-${performance.now()}`;
-        newBuilding.models.push({ name: file.name, id });
-        dispatch({ type: "UPDATE_BUILDING", payload: newBuilding });
+        const model = { name: file.name, id };
+        newBuilding.models.push(model);
+        dispatch({
+          type: "UPLOAD_MODEL",
+          payload: {
+            building: newBuilding,
+            file,
+            model,
+          },
+        });
       }
+      input.remove();
     };
     input.click();
+    // input.accept = ".ifc";
   };
 
   const onDeleteModel = (id: string) => {
     const newBuilding = { ...building };
+    const model = newBuilding.models.find((model) => model.id === id);
+    if (!model) throw new Error("Model not found!");
     newBuilding.models = newBuilding.models.filter((model) => model.id !== id);
-    dispatch({ type: "UPDATE_BUILDING", payload: newBuilding });
+    dispatch({
+      type: "DELETE_MODEL",
+      payload: { building: newBuilding, model },
+    });
   };
 
   return (
     <div className="full-width">
       {building.models.length ? (
         building.models.map((model) => (
-          <div className="list-item">
+          <div className="list-item" key={model.id}>
             <IconButton onClick={() => onDeleteModel(model.id)}>
               <DeleteIcon />
             </IconButton>
