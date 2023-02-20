@@ -6,9 +6,16 @@ import { Building } from "../../types";
 import { unzip } from "unzipit";
 
 export class BuildingScene {
+  database = new BuildingDatabase();
+
   private components: OBC.Components;
   private fragments: OBC.Fragments;
-  database = new BuildingDatabase();
+  private loadedModels = new Set<string>();
+
+  get container() {
+    const domElement = this.components.renderer.get().domElement;
+    return domElement.parentElement as HTMLDivElement;
+  }
 
   constructor(container: HTMLDivElement, building: Building) {
     this.components = new OBC.Components();
@@ -39,12 +46,13 @@ export class BuildingScene {
     this.components.tools.add(grid);
 
     this.fragments = new OBC.Fragments(this.components);
-    this.components.tools.add(this.fragments);
     this.loadAllModels(building);
   }
 
   dispose() {
+    this.loadedModels.clear();
     this.components.dispose();
+    this.fragments.dispose();
     (this.components as any) = null;
     (this.fragments as any) = null;
   }
@@ -114,7 +122,16 @@ export class BuildingScene {
 
   private async loadAllModels(building: Building) {
     const buildingsURLs = await this.database.getModels(building);
-    for (const url of buildingsURLs) {
+
+    for (const model of buildingsURLs) {
+      const { url, id } = model;
+
+      if (this.loadedModels.has(id)) {
+        continue;
+      }
+
+      this.loadedModels.add(id);
+
       const { entries } = await unzip(url);
 
       const fileNames = Object.keys(entries);
@@ -135,9 +152,15 @@ export class BuildingScene {
 
         const dataURL = URL.createObjectURL(dataBlob);
 
-        await this.fragments.load(geometryURL, dataURL);
+        const fragment = await this.fragments.load(geometryURL, dataURL);
 
         this.fragments.culler.needsUpdate = true;
+
+        // Group fragments
+
+        const groups = { model: {} as any };
+        groups.model[id] = [];
+        this.fragments.groups.add(fragment.id, groups);
       }
     }
   }

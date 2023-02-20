@@ -17,13 +17,15 @@ export class BuildingDatabase {
   }
 
   async getModels(building: Building) {
+    await this.db.open();
     const appInstance = getApp();
     const instance = getStorage(appInstance);
 
-    const urls: string[] = [];
+    const urls: { id: string; url: string }[] = [];
     for (const model of building.models) {
       const url = await this.getModelURL(instance, model.id);
-      urls.push(url);
+      const id = model.id;
+      urls.push({ url, id });
     }
 
     this.db.close();
@@ -41,11 +43,13 @@ export class BuildingDatabase {
     this.db.close();
   }
 
-  async deleteModel(id: string) {
+  async deleteModels(ids: string[]) {
     await this.db.open();
-    if (this.isModelCached(id)) {
-      localStorage.removeItem(id);
-      await this.db.models.where("id").equals(id).delete();
+    for (const id of ids) {
+      if (this.isModelCached(id)) {
+        localStorage.removeItem(id);
+        await this.db.models.where("id").equals(id).delete();
+      }
     }
     this.db.close();
   }
