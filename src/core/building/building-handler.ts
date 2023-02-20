@@ -23,4 +23,10 @@ export const buildingHandler = {
     }
     return this.viewer.convertIfcToFragments(ifc);
   },
+
+  async deleteModel(id: string) {
+    if (this.viewer) {
+      await this.viewer.database.deleteModel(id);
+    }
+  },
 };

@@ -8,7 +8,7 @@ import { unzip } from "unzipit";
 export class BuildingScene {
   private components: OBC.Components;
   private fragments: OBC.Fragments;
-  private database = new BuildingDatabase();
+  database = new BuildingDatabase();
 
   constructor(container: HTMLDivElement, building: Building) {
     this.components = new OBC.Components();

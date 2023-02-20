@@ -9,6 +9,7 @@ import { deleteDoc, doc, getFirestore, updateDoc } from "firebase/firestore";
 import { Events } from "../../middleware/event-handler";
 import { Building, Model } from "../../types";
 import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { buildingHandler } from "../building/building-handler";
 
 export const databaseHandler = {
   login: () => {
@@ -31,6 +32,7 @@ export const databaseHandler = {
     for (const model of building.models) {
       const fileRef = ref(storageInstance, model.id);
       await deleteObject(fileRef);
+      await buildingHandler.deleteModel(model.id);
     }
     events.trigger({ type: "CLOSE_BUILDING" });
   },
@@ -60,6 +62,7 @@ export const databaseHandler = {
     const storageInstance = getStorage(appInstance);
     const fileRef = ref(storageInstance, model.id);
     await deleteObject(fileRef);
+    await buildingHandler.deleteModel(model.id);
     events.trigger({ type: "UPDATE_BUILDING", payload: building });
   },
 };
