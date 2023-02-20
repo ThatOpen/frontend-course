@@ -3,49 +3,47 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ModelsIcon from "@mui/icons-material/HolidayVillage";
 import ListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Action } from "../../../middleware/actions";
-import { State } from "../../../middleware/state";
-import { FrontMenuMode } from "../front-menu/types";
 import { Tool } from "../../../types";
 
-export function getSidebarTools(
-  state: State,
-  dispatch: React.Dispatch<Action>,
-  toggleMenu: (active?: boolean, mode?: FrontMenuMode) => void
-): Tool[] {
+export function getSidebarTools(): Tool[] {
   return [
     {
       name: "Info",
+      active: false,
       icon: <ListIcon />,
-      action: () => {
+      action: ({ toggleMenu }) => {
         toggleMenu(true, "BuildingInfo");
       },
     },
     {
       name: "Models",
+      active: false,
       icon: <ModelsIcon />,
-      action: () => {
+      action: ({ toggleMenu }) => {
         toggleMenu(true, "ModelList");
       },
     },
     {
       name: "Map",
+      active: false,
       icon: <MapIcon />,
-      action: () => {
+      action: ({ dispatch }) => {
         dispatch({ type: "CLOSE_BUILDING" });
       },
     },
     {
       name: "Delete building",
+      active: false,
       icon: <DeleteIcon />,
-      action: () => {
+      action: ({ dispatch, state }) => {
         dispatch({ type: "DELETE_BUILDING", payload: state.building });
       },
     },
     {
       name: "Log out",
+      active: false,
       icon: <LogoutIcon />,
-      action: () => {
+      action: ({ dispatch }) => {
         dispatch({ type: "LOGOUT" });
       },
     },

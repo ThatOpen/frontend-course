@@ -45,4 +45,7 @@ export const executeCore = async (action: Action, events: Events) => {
     const { model, building } = action.payload;
     return databaseHandler.deleteModel(model, building, events);
   }
+  if (action.type === "EXPLODE_MODEL") {
+    return buildingHandler.explode(action.payload);
+  }
 };
