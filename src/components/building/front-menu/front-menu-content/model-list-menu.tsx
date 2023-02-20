@@ -1,5 +1,5 @@
-import { Button, IconButton, TextField } from "@mui/material";
-import { FC, useRef } from "react";
+import { Button, IconButton } from "@mui/material";
+import { FC } from "react";
 import { useAppContext } from "../../../../middleware/context-provider";
 import DeleteIcon from "@mui/icons-material/Clear";
 import "./front-menu-content.css";
