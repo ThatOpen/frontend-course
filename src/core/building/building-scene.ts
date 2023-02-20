@@ -1,11 +1,16 @@
 import * as OBC from "openbim-components";
 import * as THREE from "three";
 import { downloadZip } from "client-zip";
+import { BuildingDatabase } from "./building-database";
+import { Building } from "../../types";
+import { unzip } from "unzipit";
 
 export class BuildingScene {
-  components: OBC.Components;
+  private components: OBC.Components;
+  private fragments: OBC.Fragments;
+  private database = new BuildingDatabase();
 
-  constructor(container: HTMLDivElement) {
+  constructor(container: HTMLDivElement, building: Building) {
     this.components = new OBC.Components();
 
     this.components.scene = new OBC.SimpleScene(this.components);
@@ -14,19 +19,34 @@ export class BuildingScene {
       container
     );
 
+    const scene = this.components.scene.get();
+    scene.background = new THREE.Color();
+
     this.components.camera = new OBC.SimpleCamera(this.components);
     this.components.raycaster = new OBC.SimpleRaycaster(this.components);
     this.components.init();
 
-    this.components.scene.get().background = new THREE.Color();
+    const directionalLight = new THREE.DirectionalLight();
+    directionalLight.position.set(5, 10, 3);
+    directionalLight.intensity = 0.5;
+    scene.add(directionalLight);
+
+    const ambientLight = new THREE.AmbientLight();
+    ambientLight.intensity = 0.5;
+    scene.add(ambientLight);
 
     const grid = new OBC.SimpleGrid(this.components);
     this.components.tools.add(grid);
+
+    this.fragments = new OBC.Fragments(this.components);
+    this.components.tools.add(this.fragments);
+    this.loadAllModels(building);
   }
 
   dispose() {
     this.components.dispose();
     (this.components as any) = null;
+    (this.fragments as any) = null;
   }
 
   async convertIfcToFragments(ifc: File) {
@@ -90,5 +110,35 @@ export class BuildingScene {
     );
 
     return downloadZip(files).blob();
+  }
+
+  private async loadAllModels(building: Building) {
+    const buildingsURLs = await this.database.getModels(building);
+    for (const url of buildingsURLs) {
+      const { entries } = await unzip(url);
+
+      const fileNames = Object.keys(entries);
+
+      // Load all the fragments within this zip file
+
+      for (let i = 0; i < fileNames.length; i++) {
+        const name = fileNames[i];
+        if (!name.includes(".glb")) continue;
+
+        const geometryName = fileNames[i];
+        const geometry = await entries[geometryName].blob();
+        const geometryURL = URL.createObjectURL(geometry);
+
+        const dataName =
+          geometryName.substring(0, geometryName.indexOf(".glb")) + ".json";
+        const dataBlob = await entries[dataName].blob();
+
+        const dataURL = URL.createObjectURL(dataBlob);
+
+        await this.fragments.load(geometryURL, dataURL);
+
+        this.fragments.culler.needsUpdate = true;
+      }
+    }
   }
 }

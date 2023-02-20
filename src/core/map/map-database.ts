@@ -8,7 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Building } from "./types";
+import { Building } from "../../types";
 
 export class MapDatabase {
   private readonly buildings = "buildings";

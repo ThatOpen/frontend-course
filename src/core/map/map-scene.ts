@@ -2,7 +2,7 @@ import * as THREE from "three";
 import * as OBC from "openbim-components";
 import * as MAPBOX from "mapbox-gl";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
-import { GisParameters, Building, LngLat } from "./types";
+import { GisParameters, Building, LngLat } from "../../types";
 import { MAPBOX_KEY } from "../../config";
 import { User } from "firebase/auth";
 import { MapDatabase } from "./map-database";

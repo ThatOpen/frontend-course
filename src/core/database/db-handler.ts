@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { deleteDoc, doc, getFirestore, updateDoc } from "firebase/firestore";
 import { Events } from "../../middleware/event-handler";
-import { Building, Model } from "../map/types";
+import { Building, Model } from "../../types";
 import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
 
 export const databaseHandler = {

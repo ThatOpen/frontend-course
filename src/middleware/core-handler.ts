@@ -30,7 +30,8 @@ export const executeCore = async (action: Action, events: Events) => {
     return databaseHandler.updateBuilding(action.payload);
   }
   if (action.type === "START_BUILDING") {
-    return buildingHandler.start(action.payload);
+    const { container, building } = action.payload;
+    return buildingHandler.start(container, building);
   }
   if (action.type === "CLOSE_BUILDING") {
     return buildingHandler.remove();
