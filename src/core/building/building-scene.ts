@@ -1,3 +1,5 @@
+import { Events } from "./../../middleware/event-handler";
+import { Floorplan } from "./../../types";
 import * as OBC from "openbim-components";
 import * as THREE from "three";
 import { downloadZip } from "client-zip";
@@ -9,7 +11,7 @@ import { unzip } from "unzipit";
 export class BuildingScene {
   database = new BuildingDatabase();
 
-  private floorplans: { name: string; id: string }[] = [];
+  private floorplans: Floorplan[] = [];
   private components: OBC.Components;
   private fragments: OBC.Fragments;
   private loadedModels = new Set<string>();
@@ -20,9 +22,11 @@ export class BuildingScene {
     return domElement.parentElement as HTMLDivElement;
   }
 
-  private events: { name: any; action: any }[] = [];
+  private sceneEvents: { name: any; action: any }[] = [];
+  private events: Events;
 
-  constructor(container: HTMLDivElement, building: Building) {
+  constructor(container: HTMLDivElement, building: Building, events: Events) {
+    this.events = events;
     this.components = new OBC.Components();
 
     this.components.scene = new OBC.SimpleScene(this.components);
@@ -129,14 +133,13 @@ export class BuildingScene {
     return file as File;
   }
 
-  toggleFloorplan(active: boolean) {
+  toggleFloorplan(active: boolean, floorplan?: Floorplan) {
     const floorNav = this.getFloorNav();
     if (!this.floorplans.length) return;
-    if (active) {
+    if (active && floorplan) {
       this.toggleGrid(false);
       this.toggleEdges(true);
-      const first = this.floorplans[0];
-      floorNav.goTo(first.id);
+      floorNav.goTo(floorplan.id);
       this.fragments.materials.apply(this.whiteMaterial);
     } else {
       this.toggleGrid(true);
@@ -161,7 +164,7 @@ export class BuildingScene {
   }
 
   private setupEvents() {
-    this.events = [
+    this.sceneEvents = [
       { name: "mousemove", action: this.preselect },
       { name: "click", action: this.select },
       { name: "mouseup", action: this.updateCulling },
@@ -174,7 +177,7 @@ export class BuildingScene {
   }
 
   private toggleEvents(active: boolean) {
-    for (const event of this.events) {
+    for (const event of this.sceneEvents) {
       if (active) {
         window.addEventListener(event.name, event.action);
       } else {
@@ -334,6 +337,11 @@ export class BuildingScene {
             point: new THREE.Vector3(0, elevation, 0),
           });
         }
+
+        this.events.trigger({
+          type: "UPDATE_FLOORPLANS",
+          payload: this.floorplans,
+        });
       }
 
       // Load all the fragments within this zip file

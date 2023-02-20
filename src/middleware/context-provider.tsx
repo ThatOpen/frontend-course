@@ -1,7 +1,6 @@
 import {
   createContext,
   useReducer,
-  useEffect,
   FC,
   PropsWithChildren,
   useContext,

@@ -5,3 +5,7 @@
 .margin-left {
   margin-left: 15px;
 }
+
+.wide-button {
+  width: 100%;
+}

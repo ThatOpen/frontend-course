@@ -1,5 +1,4 @@
 import ExplodeIcon from "@mui/icons-material/ImportExport";
-import LayersIcon from "@mui/icons-material/Layers";
 import CutIcon from "@mui/icons-material/ContentCut";
 import RulerIcon from "@mui/icons-material/Straighten";
 import { Tool } from "../../../types";
@@ -37,17 +36,6 @@ export function getBottombarTools(): Tool[] {
         deactivateAllTools(dispatch, "Explosion");
         tool.active = !tool.active;
         dispatch({ type: "EXPLODE_MODEL", payload: tool.active });
-      },
-    },
-    {
-      name: "Floor plan navigation",
-      icon: <LayersIcon />,
-      active: false,
-      action: (dispatch: any) => {
-        const tool = findTool("Floor plan navigation");
-        deactivateAllTools(dispatch, "Floor plan navigation");
-        tool.active = !tool.active;
-        dispatch({ type: "TOGGLE_FLOORPLAN", payload: tool.active });
       },
     },
   ];
