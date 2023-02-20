@@ -13,7 +13,7 @@ export const BuildingBottomMenu: FC = () => {
   return (
     <Card className="bottom-menu">
       {tools.map((tool) => (
-        <IconButton>{tool.icon}</IconButton>
+        <IconButton key={tool.name}>{tool.icon}</IconButton>
       ))}
     </Card>
   );
