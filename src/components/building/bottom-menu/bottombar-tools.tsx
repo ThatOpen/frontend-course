@@ -44,7 +44,10 @@ export function getBottombarTools(): Tool[] {
       icon: <LayersIcon />,
       active: false,
       action: (dispatch: any) => {
-        console.log("hei");
+        const tool = findTool("Floor plan navigation");
+        deactivateAllTools(dispatch, "Floor plan navigation");
+        tool.active = !tool.active;
+        dispatch({ type: "TOGGLE_FLOORPLAN", payload: tool.active });
       },
     },
   ];
