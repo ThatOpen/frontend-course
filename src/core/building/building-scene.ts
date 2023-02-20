@@ -50,7 +50,7 @@ export class BuildingScene {
   }
 
   async convertIfcToFragments(ifc: File) {
-    const fragments = new OBC.Fragments(this.components);
+    let fragments = new OBC.Fragments(this.components);
 
     fragments.ifcLoader.settings.optionalCategories.length = 0;
 
