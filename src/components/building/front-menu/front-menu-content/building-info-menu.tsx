@@ -1,5 +1,5 @@
-import { Button, TextField } from "@mui/material";
-import { FC, useRef } from "react";
+import { Button, TextField, Box } from "@mui/material";
+import { FC } from "react";
 import { useAppContext } from "../../../../middleware/context-provider";
 import "./front-menu-content.css";
 
@@ -13,62 +13,68 @@ export const BuildingInfoMenu: FC<{
     throw new Error("No building active!");
   }
 
-  const newBuilding = { ...building } as any;
-
-  const onUpdateBuilding = () => {
+  const onUpdateBuilding = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const newBuilding = { ...building } as any;
+    newBuilding.name = data.get("building-name") || building.name;
+    newBuilding.lat = data.get("building-lat") || building.lat;
+    newBuilding.lng = data.get("building-lng") || building.lng;
     dispatch({ type: "UPDATE_BUILDING", payload: newBuilding });
     onToggleMenu(false);
   };
 
-  const onInputChanged = (key: string, event: any) => {
-    newBuilding[key] = event.target.value;
-  };
-
   return (
-    <div className="full-width">
+    <Box component="form" onSubmit={onUpdateBuilding} className="full-width">
       <div className="list-item">
         <TextField
-          className="full-width"
-          id="filled-helperText"
+          required
+          fullWidth
+          id="building-id"
           label="Building ID"
-          defaultValue={building.uid}
+          name="building-id"
+          autoComplete="building-id"
+          value={building.uid}
           disabled={true}
         />
       </div>
       <div className="list-item">
         <TextField
-          className="full-width"
-          id="filled-helperText"
-          label="Name"
+          fullWidth
+          id="building-name"
+          label="Building Name"
+          name="building-name"
+          autoComplete="building-name"
           defaultValue={building.name}
-          onChange={(event) => onInputChanged("name", event)}
         />
       </div>
       <div className="list-item">
         <TextField
-          className="full-width"
-          id="filled-helperText"
+          fullWidth
+          required
+          id="building-lng"
           label="Longitude"
+          name="building-lng"
+          autoComplete="building-lng"
           defaultValue={building.lng}
-          onChange={(event) => onInputChanged("lng", event)}
-          type="number"
         />
       </div>
       <div className="list-item">
         <TextField
-          className="full-width"
-          id="filled-helperText"
+          fullWidth
+          required
+          id="building-lat"
           label="Latitude"
+          name="building-lat"
+          autoComplete="building-lat"
           defaultValue={building.lat}
-          onChange={(event) => onInputChanged("lat", event)}
-          type="number"
         />
       </div>
       <div className="list-item">
-        <Button onClick={onUpdateBuilding} className="submit-button">
+        <Button type="submit" className="submit-button">
           Update building
         </Button>
       </div>
-    </div>
+    </Box>
   );
 };
