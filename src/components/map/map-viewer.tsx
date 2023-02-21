@@ -1,5 +1,4 @@
 import { FC, useRef, useEffect, useState } from "react";
-import { LogOutButton } from "../user/logout-button";
 import { Navigate } from "react-router-dom";
 import { useAppContext } from "../../middleware/context-provider";
 import { Button } from "@mui/material";
@@ -56,7 +55,6 @@ export const MapViewer: FC = () => {
       <div className="top-navbar">
         <h1>Hello map viewer!</h1>
         <Button onClick={onToggleCreate}>Create building</Button>
-        <LogOutButton />
       </div>
     </>
   );
