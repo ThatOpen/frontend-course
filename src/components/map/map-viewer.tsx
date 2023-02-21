@@ -15,6 +15,10 @@ export const MapViewer: FC = () => {
     setIsCreating(!isCreating);
   };
 
+  const onLogout = () => {
+    dispatch({ type: "LOGOUT" });
+  };
+
   const onCreate = () => {
     if (isCreating) {
       dispatch({ type: "ADD_BUILDING", payload: user });
@@ -52,9 +56,11 @@ export const MapViewer: FC = () => {
           <Button onClick={onToggleCreate}>cancel</Button>
         </div>
       )}
-      <div className="top-navbar">
-        <h1>Hello map viewer!</h1>
-        <Button onClick={onToggleCreate}>Create building</Button>
+      <div className="button-container">
+        <Button variant="contained" onClick={onToggleCreate}>
+          Create building
+        </Button>
+        <Button onClick={onLogout}>Log out</Button>
       </div>
     </>
   );

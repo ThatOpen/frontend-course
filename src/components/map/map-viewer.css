@@ -1,7 +1,8 @@
-.top-navbar {
-  position: fixed;
-  background-color: white;
-  width: 100vw;
+.button-container {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
 }
 
 .overlay {
